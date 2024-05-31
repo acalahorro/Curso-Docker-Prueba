@@ -5,5 +5,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    secrets:	
+      my_secret: my-secret-value
     environment:
       my_env: 123
+    resources:	
+      memory: 2Gi
+
+    steps:
+    - name: Checkout código fuente
+      uses: actions/checkout@v2
+
+    - name: Cache capas de imagen Docker
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/docker
+        key: docker-${{ runner.os }}-${{ hashFiles('**/Dockerfile') }}
+        restore-keys: |
+          docker-${{ runner.os }}-
